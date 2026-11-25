@@ -33,6 +33,7 @@ Seluruh dunia 3D, set panggung, props, tekstur marmer/kayu/grid, dan karakter ko
 ├── public/                       # Aset audio voiceover & file master mix
 │   └── demo_vo.mp3
 ├── scripts/                      # Tooling render Remotion & audio procedural
+│   ├── lib/render-env.mjs        # Resolusi temp dir, browser & GL (lintas platform)
 │   ├── gen-chunks.py             # Pemotong kata SRT menjadi chunk 1-2 kata
 │   ├── gen-audio.py              # Generator procedural audio DSP & SFX
 │   ├── render-stills.mjs         # Render 5 Hero Stills (Fase 1: Look-dev)
@@ -66,6 +67,20 @@ Seluruh dunia 3D, set panggung, props, tekstur marmer/kayu/grid, dan karakter ko
 - **Python:** Versi 3.10 atau lebih baru (dengan modul `numpy`, `scipy`).
 - **Google Chrome:** Terinstal di sistem (digunakan oleh headless Chromium Remotion).
 - **FFmpeg:** Terinstal dan ada di PATH sistem.
+
+### Override Environment Render (lintas platform)
+Semua script `scripts/render-*.mjs` memakai `scripts/lib/render-env.mjs`, tanpa path hardcode:
+
+| Variabel | Fungsi | Default |
+| :-- | :-- | :-- |
+| `REMOTION_TMP` | Folder temp bundel Remotion (pakai disk besar) | `<os.tmpdir()>/remotion-tmp` |
+| `CHROME_PATH` | Binary Chrome/Chromium | auto-deteksi (`google-chrome`, `chromium`, ...), lalu browser bawaan Remotion |
+| `REMOTION_GL` | Backend GL (mis. `angle`) | default Remotion |
+
+Contoh:
+```bash
+REMOTION_TMP=/mnt/bigdisk/remotion-tmp npm run render:stills
+```
 
 ### 2. Instalasi Dependensi
 ```bash

@@ -2,17 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
+import { browserExecutable, chromiumOptions, logRenderEnv } from "./lib/render-env.mjs";
 
-const remTmp = process.env.REMOTION_TMP || "D:/remotion-tmp";
-fs.mkdirSync(remTmp, { recursive: true });
-process.env.TEMP = process.env.TMP = process.env.REMOTION_TMP = remTmp;
 
 const outputLocation = path.resolve(process.argv[2] || "out/demo/Demo_Video_Final.mp4");
 fs.mkdirSync(path.dirname(outputLocation), { recursive: true });
 
-const browserExecutable = "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const chromiumOptions = { gl: "angle" };
 
+logRenderEnv();
 console.log("Bundling DemoShort with Remotion...");
 const serveUrl = await bundle({
   entryPoint: path.resolve("src/index.ts"),

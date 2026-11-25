@@ -2,16 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
+import { browserExecutable, chromiumOptions, logRenderEnv } from "./lib/render-env.mjs";
 
-const remTmp = process.env.REMOTION_TMP || "D:/remotion-tmp";
-fs.mkdirSync(remTmp, { recursive: true });
-process.env.TEMP = process.env.TMP = process.env.REMOTION_TMP = remTmp;
 
 const outDir = path.resolve("out/demo/previews");
 fs.mkdirSync(outDir, { recursive: true });
 
-const browserExecutable = "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const chromiumOptions = { gl: "angle" };
 
 const clips = [
   { name: "preview_1_hook", range: [0, 104] },
@@ -21,6 +17,7 @@ const clips = [
   { name: "preview_5_volatilitas", range: [1595, 1699] },
 ];
 
+logRenderEnv();
 console.log("Bundling DemoShortWithCaptions with Remotion...");
 const serveUrl = await bundle({
   entryPoint: path.resolve("src/index.ts"),

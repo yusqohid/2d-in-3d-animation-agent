@@ -2,16 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderStill, selectComposition } from "@remotion/renderer";
+import { browserExecutable, chromiumOptions, logRenderEnv } from "./lib/render-env.mjs";
 
-const remTmp = process.env.REMOTION_TMP || "D:/remotion-tmp";
-fs.mkdirSync(remTmp, { recursive: true });
-process.env.TEMP = process.env.TMP = process.env.REMOTION_TMP = remTmp;
 
 const outDir = path.resolve("out/demo/stills");
 fs.mkdirSync(outDir, { recursive: true });
 
-const browserExecutable = "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const chromiumOptions = { gl: "angle" };
 
 // 5 Key Hero Stills
 const stills = [
@@ -22,6 +18,7 @@ const stills = [
   { frame: 1630, name: "hero_f1630_volatile" },
 ];
 
+logRenderEnv();
 console.log("Bundling DemoShort with Remotion...");
 const serveUrl = await bundle({
   entryPoint: path.resolve("src/index.ts"),

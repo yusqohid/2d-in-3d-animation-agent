@@ -104,9 +104,13 @@ npm run render:previews
 ### Fase 3: Full Final Render
 1. **Sintesis Audio SFX Master:**
    ```bash
-   npm run render:audio
+   # sekali saja: env Python terisolasi (butuh numpy + scipy)
+   uv venv --python 3.13 .venv && uv pip install --python .venv/bin/python numpy scipy
+   # lalu tiap kali audio berubah:
+   .venv/bin/python scripts/gen-audio.py   # atau: npm run render:audio
    ```
-   *Menghasilkan `public/demo_mix.wav` yang ter-normalisasi -15.0 LUFS.*
+   *Menghasilkan `public/saham_mix.wav` (48 kHz stereo, 70.700 s) ter-normalisasi
+   **-15.0 LUFS** dengan true peak ≤ **-1.2 dBTP** (terukur -1.6 dBFS).*
 
 2. **Render Video 3D Penuh:**
    ```bash

@@ -37,14 +37,20 @@ Model aktif saat pekerjaan visual 3D: wajib **ARGON**.
 - [x] `scripts/gen-chunks.py` baca `voice/Saham & crypto.json`, tulis `src/videos/demo/caption_chunks.json`
 - [x] `PRD.md` + `MILESTONES.md` dibuat dari README/GUIDELINES
 
-## M4 — Audio Prosedural (belum)
+## M4 — Audio Prosedural (selesai)
 
-- [ ] Install dependensi Python audio: `numpy` (ada 2.5.5) + **`scipy` (BELUM terpasang)**
-- [ ] Jalankan `python scripts/gen-audio.py` → `public/saham_mix.wav` (-15.0 LUFS, TP ≤ -1.2 dBTP)
-- [ ] Verifikasi loudness dengan `ffmpeg -af ebur128` / `astats`
+- [x] Dependensi Python audio terpasang di venv terisolasi (`.venv`, Python 3.13.15):
+      `uv venv --python 3.13 .venv && uv pip install --python .venv/bin/python numpy scipy`
+      → `numpy==2.5.5`, `scipy==1.18.1` (venv sudah masuk `.gitignore`)
+- [x] `python scripts/gen-audio.py` → `public/saham_mix.wav`
+- [x] Verifikasi independen `ffmpeg -af ebur128=peak=true`:
+      **I = -15.0 LUFS**, LRA = 2.2 LU, **True peak = -1.6 dBFS**, durasi 70.700 s (= 2121/30)
+- [x] Fix bug `scripts/gen-audio.py`: `dsp.true_peak()` sudah mengembalikan dBTP, tapi di-log
+      sebagai rasio linear (`20*log10(tp)`) sehingga tercetak `-180.00 dBTP` dan cabang limiter
+      tidak pernah jalan
 
-  Catatan: `src/videos/demo/Bridge.tsx:155` memakai `staticFile("saham_mix.wav")` yang
-  belum ada di `public/` → render audio akan gagal sampai langkah ini selesai.
+  Catatan: `src/videos/demo/Bridge.tsx:155` memakai `staticFile("saham_mix.wav")`; file ini
+  kini ada di `public/` tapi di-ignore git (`public/*_mix.wav`) — hasilkan ulang per mesin.
 
 ## M5 — Fase 1: Look-dev Hero Stills (belum) — **WAJIB ARGON**
 

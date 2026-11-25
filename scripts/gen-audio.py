@@ -270,14 +270,13 @@ def main():
     gain = 10 ** ((TARGET_LUFS - lufs) / 20.0)
     norm = mix * gain
     
-    # Peak limiter (ensure <= -1.2 dBTP)
-    tp = true_peak(norm)
-    tp_db = 20 * np.log10(max(1e-9, tp))
+    # Peak limiter (ensure <= -1.2 dBTP); dsp.true_peak already returns dBTP, not a linear ratio
+    tp_db = true_peak(norm)
     print(f"Normalized True Peak: {tp_db:.2f} dBTP")
     if tp_db > CEIL_DBTP:
         reduction = 10 ** ((CEIL_DBTP - tp_db) / 20.0)
         norm = norm * reduction
-        print(f"Limiter applied: reduced by {tp_db - CEIL_DBTP:.2f} dB -> {20*np.log10(true_peak(norm)):.2f} dBTP")
+        print(f"Limiter applied: reduced by {tp_db - CEIL_DBTP:.2f} dB -> {true_peak(norm):.2f} dBTP")
     
     out_wav = os.path.join(ROOT, "public", "saham_mix.wav")
     print(f"Writing master audio file -> {out_wav}...")

@@ -8,6 +8,7 @@
     "render:stills": "node scripts/render-stills.mjs",
     "render:previews": "node scripts/render-previews.mjs",
     "render:audio": "python scripts/gen-audio.py",
+    "render:chunks": "python scripts/gen-chunks.py",
     "render:video": "node scripts/render-video.mjs",
     "render:captions": "node scripts/render-captions.mjs",
     "build": "remotion bundle src/index.ts"
